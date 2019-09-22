@@ -1,0 +1,73 @@
+<main class="login-form" style="margin-top: 50px;">
+    <div class="cotainer">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header"><h2>Log in</h2></div>
+                    <div class="card-body">
+
+                        
+
+                        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+                        <% n = notice %>
+                        <% unless n.nil? %>
+                          <div class="alert alert-success"><%= n %></div>
+                        <% end %>
+
+                        <% n = alert %>
+                        <% unless n.nil? %>
+                          <div class="alert alert-danger"><%= n %></div>
+                        <% end %>
+                        
+                        <div class="form-group row">
+                            <div class="col-md-4 col-form-label text-md-right">
+                              <%= f.label :email, class: "col-form-label text-md-right" %>
+                            </div>
+                            <div class="col-md-6">
+                              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %> 
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-4 col-form-label text-md-right">
+                              <%= f.label :password, class: "col-form-label text-md-right" %>
+                            </div>
+                            <div class="col-md-6">
+                              <%= f.password_field :password, autofocus: true, autocomplete: "password", class: "form-control", required: true %> 
+                            </div>
+                        </div>
+                           
+
+                        <div class="form-group row">
+                            <div class="col-md-4 col-form-label text-md-right">
+                               
+                            </div>
+                            <div class="col-md-6">
+                               <% if devise_mapping.rememberable? %>
+                                  <div class="field">
+                                    <%= f.check_box :remember_me %>
+                                    <%= f.label :remember_me %>
+                                  </div>
+                                <% end %>
+                            </div>
+                        </div>   
+
+                        <div class="col-md-6 offset-md-4">
+                                <%= f.submit "Log in", class: "btn btn-primary" %>
+
+                                Or <%= render "devise/shared/links" %>
+                        </div> 
+
+                        
+                        <% end %>
+
+                         
+
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</main>

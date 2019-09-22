@@ -1,0 +1,77 @@
+<header class="bg-warning">
+  <p>
+    Share location by selecting users from the list, you can adjust proper location by dragging marker.
+  </p>
+  <nav class="navbar navbar-expand-sm navbar-light sticky-top">
+  
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-menu" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <%#= User.public_users(current_user).map{|u|  [u.roles,u]}.inspect %>
+    <div class="collapse navbar-collapse" id="mobile-menu">
+    	<%= form_with(model: Place.new, local: true, id: "locationForm", class: "form-inline name-form") do |f| %>
+    	<%= f.hidden_field :lat %>
+    	<%= f.hidden_field :lng %>
+    	<%= f.collection_select :users, User.public_users(current_user), :id, :display_name, {:selected => [], multiple: true }, multiple: true  %>
+    	<%= f.submit("Share Location", class: "btn submit-btn btn-outline-success my-2 my-sm-0") %>
+    	<div class="loader"></div>
+    	<% end %>
+     
+      <div class="share-url"></div>
+    </div>
+  </nav>
+</header>
+<section class="map-section">
+	<div class="row">
+		<div class="col-md-6">
+			<div id="currentMap"></div>
+		</div>
+    <div class="col-md-3">
+        <h4>Places shared with you</h4>
+        <table class="table">
+          <tr>
+            <th>Location</th>
+            <th>User</th>
+          </tr>
+
+        <% current_user.places.each do |place| %>
+          <tr>
+            <td><%= place.full_address %></td>
+            <td><%= place.users.first.display_name unless place.users.first.nil? %></td>
+          </tr>
+        <% end %>
+        </table>
+    </div>
+		<div class="col-md-3">
+      <h4>Places you shared</h4>
+
+      <table class="table">
+          <tr>
+            <th>Location</th>
+            <th>Users</th>
+            <td></td>
+          </tr>
+
+        <% current_user.locations.each do |place| %>
+        <% if place.full_address %>
+          <tr>
+            <td><%= place.full_address %></td>
+            <td><%= place.users.map{|u| u.display_name }.join(", ") %> </td>
+            <td><%= link_to "View on Map", "#", 
+            onclick:"return userLocationMap({lat: #{place.lat}, lng: #{place.lng} }, this)",
+            data: { address: place.full_address } %>
+            </td>
+          </tr>
+          <% else %>
+          <% #place.destroy %>
+          <% end %>
+        <% end %>
+      </table>
+		</div>
+    <div class="col-md-12">
+      <div class="usermap" id="userlocationmap"></div>
+    </div>
+	</div>
+	
+</section>
+ 
